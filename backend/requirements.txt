@@ -1,7 +1,9 @@
-
 fastapi
 uvicorn
 pydantic
 httpx
 airportsdata
 timezonefinder
+python-dotenv
+python-jose[cryptography]
+email-validator
