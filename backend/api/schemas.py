@@ -1,7 +1,4 @@
 from pydantic import BaseModel, field_validator, model_validator
-from engine.airports import AIRPORTS
-
-VALID_AIRPORTS = set(AIRPORTS.keys())
 
 
 class FlightCreate(BaseModel):
@@ -11,10 +8,7 @@ class FlightCreate(BaseModel):
     @field_validator("from_code", "to_code")
     @classmethod
     def validate_airport(cls, v):
-        v = v.upper()
-        if v not in VALID_AIRPORTS:
-            raise ValueError(f"Invalid airport code: {v}")
-        return v
+        return v.upper()
 
     @model_validator(mode="after")
     def validate_different_airports(self):
@@ -50,3 +44,19 @@ class WeatherResponse(BaseModel):
     timezone: str
     lat: float
     lon: float
+
+
+class AirportSearchResult(BaseModel):
+    code: str
+    name: str
+    country: str
+    lat: float
+    lon: float
+    distance_miles: float
+    duration_minutes: float
+
+
+class AirportSearchResponse(BaseModel):
+    from_code: str
+    target_minutes: float
+    results: list[AirportSearchResult]
