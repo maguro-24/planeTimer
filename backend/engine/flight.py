@@ -1,21 +1,32 @@
 import math
 import time
-from engine.airports import AIRPORTS
+from engine.db import db_get
+
+
+def get_airport(code: str) -> dict:
+    results = db_get("airports", params={"code": f"eq.{code}", "select": "code,lat,lon,name,country"})
+    if not results:
+        raise KeyError(f"Airport not found: {code}")
+    return results[0]
 
 
 class Flight:
-    def __init__(self, from_code, to_code):
+    def __init__(self, from_code: str, to_code: str, start_time: float = None):
         self.from_code = from_code
         self.to_code = to_code
-        
 
-        self.start_lat, self.start_lon = AIRPORTS[from_code]
-        self.end_lat, self.end_lon = AIRPORTS[to_code]
+        from_airport = get_airport(from_code)
+        to_airport = get_airport(to_code)
+
+        self.start_lat = from_airport["lat"]
+        self.start_lon = from_airport["lon"]
+        self.end_lat = to_airport["lat"]
+        self.end_lon = to_airport["lon"]
 
         self.distance = self._haversine()
         self.duration = self._estimate_duration()
 
-        self.start_time = time.time()
+        self.start_time = start_time if start_time else time.time()
 
     def _haversine(self):
         R = 3958.8
@@ -30,7 +41,7 @@ class Flight:
         return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1-a))
 
     def _estimate_duration(self):
-        speed = 434.488 # knots
-        climb_pen = 10 #min
-        tax_time = 20 #min
-        return (((self.distance / speed) * 60) + climb_pen + tax_time) * 60 #sec
+        speed = 434.488  # knots
+        climb_pen = 10   # min 10
+        tax_time = 20    # min 20
+        return (((self.distance / speed) * 60) + climb_pen + tax_time) * 60  # sec
