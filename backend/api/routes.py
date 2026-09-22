@@ -14,6 +14,7 @@ from api.schemas import (
     WeatherResponse,
     AirportSearchResult,
     AirportSearchResponse,
+    AirportNameResult,
 )
 
 router = APIRouter()
@@ -54,7 +55,6 @@ def create_flight(data: FlightCreate, user_id: str = Depends(get_user_id)):
         "start_time": datetime.fromtimestamp(flight.start_time, tz=timezone.utc).isoformat(),
     })
 
-    # Update user stats
     db_rpc("increment_user_stats", {
         "p_user_id": user_id,
         "p_miles": flight.distance,
@@ -118,3 +118,32 @@ def search_airports(from_code: str, duration: float, user_id: str = Depends(get_
             for r in results
         ]
     )
+
+
+@router.get("/airports/name", response_model=list[AirportNameResult])
+def search_airports_by_name(q: str, user_id: str = Depends(get_user_id)):
+    """Search airports by city or airport name, returns up to 5 results."""
+    if len(q) < 2:
+        raise HTTPException(status_code=400, detail="Query must be at least 2 characters")
+
+    try:
+        results = db_rpc("search_airports_by_name", {
+            "search_term": q,
+            "limit_count": 5,
+        })
+    except Exception:
+        raise HTTPException(status_code=502, detail="Airport name search failed")
+
+    if not results:
+        raise HTTPException(status_code=404, detail="No airports found")
+
+    return [
+        AirportNameResult(
+            code=r["code"],
+            name=r["name"],
+            country=r["country"],
+            lat=r["lat"],
+            lon=r["lon"],
+        )
+        for r in results
+    ]

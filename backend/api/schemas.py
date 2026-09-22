@@ -60,3 +60,11 @@ class AirportSearchResponse(BaseModel):
     from_code: str
     target_minutes: float
     results: list[AirportSearchResult]
+
+
+class AirportNameResult(BaseModel):
+    code: str
+    name: str
+    country: str
+    lat: float
+    lon: float
