@@ -295,7 +295,7 @@ export default function FlightSelector({ onFlightCreated }: Props) {
                   value={hours}
                   onChange={(e) => setHours(e.target.value)}
                   min={0}
-                  max={15}
+                  max={24}
                   className="w-full bg-white/5 border border-white/10 text-white placeholder-slate-500 rounded px-4 py-3 text-sm outline-none focus:border-white/30 transition-colors"
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs pointer-events-none">hr</span>
