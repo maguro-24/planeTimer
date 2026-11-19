@@ -233,7 +233,7 @@ export default function FlightSelector({ onFlightCreated }: Props) {
   }
 
   return (
-    <div className="w-screen h-screen bg-black flex items-center justify-center">
+    <div className="relative w-full min-h-screen bg-black flex items-center justify-center py-10">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#0f1f3d_0%,_#000_70%)]" />
 
       <div className="relative z-10 w-full max-w-md px-8">
