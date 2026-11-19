@@ -37,7 +37,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-screen h-screen bg-black overflow-hidden">
+    <div className={`w-full bg-black ${screen === "cabin" ? "h-screen overflow-hidden" : "min-h-screen"}`}>
       {screen === "login" && (
         <LoginScreen onLoggedIn={handleLoggedIn} />
       )}
