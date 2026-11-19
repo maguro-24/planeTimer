@@ -105,6 +105,12 @@ export function logout(): void {
   clearTokens();
 }
 
+export async function completeFlight(flightId: number): Promise<{ status: string }> {
+  return apiFetch<{ status: string }>(`/flight/${flightId}/complete`, {
+    method: "POST",
+  });
+}2 
+
 // ─── Flights ──────────────────────────────────────────────────────────────────
 
 export interface FlightResponse {
