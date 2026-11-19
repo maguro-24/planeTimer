@@ -85,7 +85,8 @@ SUPABASE_SERVICE_KEY=your_service_key
 - Live weather integration
 - User statistics
 - Airport database with PostGIS
-
+- Interactive IFE map
+- 
 ### 🚧 In Progress
 
 - React frontend
@@ -99,7 +100,6 @@ SUPABASE_SERVICE_KEY=your_service_key
 ## Planned Features
 
 - Cabin window view with dynamic weather
-- Interactive IFE map
 - Google OAuth
 - Flight completion tracking
 - Public deployment
