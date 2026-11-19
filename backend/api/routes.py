@@ -55,11 +55,6 @@ def create_flight(data: FlightCreate, user_id: str = Depends(get_user_id)):
         "start_time": datetime.fromtimestamp(flight.start_time, tz=timezone.utc).isoformat(),
     })
 
-    db_rpc("increment_user_stats", {
-        "p_user_id": user_id,
-        "p_miles": flight.distance,
-        "p_seconds": flight.duration,
-    })
 
     return FlightResponse(
         flight_id=row["id"],
@@ -151,3 +146,21 @@ def search_airports_by_name(q: str, user_id: str = Depends(get_user_id)):
         )
         for r in results
     ]
+
+@router.post("/flight/{flight_id}/complete")
+def complete_flight(flight_id: int, user_id: str = Depends(get_user_id)):
+    """Mark a flight finished and add it to the user's stats (checked atomically in SQL)."""
+    try:
+        status = db_rpc("complete_flight", {
+            "p_flight_id": flight_id,
+            "p_user_id": user_id,
+        })
+    except Exception:
+        raise HTTPException(status_code=502, detail="Failed to complete flight")
+
+    if status == "not_found":
+        raise HTTPException(status_code=404, detail="Flight not found")
+    if status == "not_finished":
+        raise HTTPException(status_code=400, detail="Flight is not finished yet")
+
+    return {"status": status}  # "completed" or "already_completed"

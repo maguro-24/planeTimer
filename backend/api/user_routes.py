@@ -26,6 +26,7 @@ def get_stats(user_id: str = Depends(get_user_id)):
         "select": "id,from_code,to_code,distance,duration,start_time",
         "order": "start_time.desc",
         "limit": "10",
+        "completed": "eq.true",
     })
 
     return UserStats(
