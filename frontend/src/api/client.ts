@@ -111,6 +111,10 @@ export interface FlightResponse {
   flight_id: number;
   distance: number;
   duration: number;
+  from_lat: number;
+  from_lon: number;
+  to_lat: number;
+  to_lon: number;
 }
 
 export async function createFlight(

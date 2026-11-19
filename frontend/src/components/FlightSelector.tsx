@@ -182,6 +182,10 @@ export default function FlightSelector({ onFlightCreated }: Props) {
         toCode: routeTo,
         distance: flight.distance,
         duration: flight.duration,
+        fromLat: flight.from_lat,
+        fromLon: flight.from_lon,
+        toLat: flight.to_lat,
+        toLon: flight.to_lon,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create flight. Check both airport codes are valid.");

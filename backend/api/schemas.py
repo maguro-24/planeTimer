@@ -21,6 +21,10 @@ class FlightResponse(BaseModel):
     flight_id: int
     distance: float
     duration: float
+    from_lat: float
+    from_lon: float
+    to_lat: float
+    to_lon: float
 
 
 class PositionResponse(BaseModel):

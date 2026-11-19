@@ -12,6 +12,10 @@ export interface ActiveFlight {
   toCode: string;
   distance: number;
   duration: number;
+  fromLat: number;
+  fromLon: number;
+  toLat: number;
+  toLon: number;
 }
 
 export default function App() {

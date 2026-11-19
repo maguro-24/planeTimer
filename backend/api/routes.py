@@ -65,6 +65,10 @@ def create_flight(data: FlightCreate, user_id: str = Depends(get_user_id)):
         flight_id=row["id"],
         distance=flight.distance,
         duration=flight.duration,
+        from_lat=flight.start_lat,
+        from_lon=flight.start_lon,
+        to_lat=flight.end_lat,
+        to_lon=flight.end_lon,
     )
 
 
