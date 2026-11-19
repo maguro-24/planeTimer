@@ -207,6 +207,10 @@ export default function FlightSelector({ onFlightCreated }: Props) {
         toCode: selected.code,
         distance: flight.distance,
         duration: flight.duration,
+        fromLat: flight.from_lat,
+        fromLon: flight.from_lon,
+        toLat: flight.to_lat,
+        toLon: flight.to_lon,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create flight");
