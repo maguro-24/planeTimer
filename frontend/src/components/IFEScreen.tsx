@@ -76,9 +76,10 @@ export default function IFEScreen({ flight, position }: Props) {
         style={{ background: "#0a0e1a" }}
       >
         <TileLayer
-            url={`https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=${import.meta.env.VITE_CARTO_KEY}`}
-            attribution='&copy; OpenStreetMap contributors &copy; CARTO'
-            />
+          url={`https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=${import.meta.env.VITE_CARTO_KEY}`}
+          attribution='&copy; OpenStreetMap contributors &copy; CARTO'
+          detectRetina
+        />3
         <FitRoute flight={flight} />
         <Polyline positions={[from, to]} pathOptions={{ color: "#ffffff", weight: 2, opacity: 0.35, dashArray: "6 8" }} />
         {planePos && (
