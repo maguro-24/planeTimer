@@ -1,39 +1,41 @@
+import wingUrl from "/home/vinn/projects/planeTimer/frontend/src/assets/Faceted Blue-Tipped Airplane Wing.png";
+import { mix, rgb } from "./sky";
+import type { Palette } from "./sky";
+
 interface Props {
-  brightness: number; // 0..1, dims the wing at dusk and night
+  palette: Palette;
 }
 
-// Wing and winglet seen from a window seat. Coordinates are percentages of the pane.
-export default function Wing({ brightness }: Props) {
+// The wing, flush with the right edge so it runs off the screen. On wide screens its tip sits
+// about a third of the way down (31.8vh); on tall screens it hangs from the bottom corner.
+// It dims with the light and picks up a warm tint at sunrise and sunset.
+export default function Wing({ palette }: Props) {
+  const brightness = 0.22 + 0.78 * palette.bright;
+  const tint = mix(palette.lit, palette.bottom, 0.3);
+
   return (
-    <svg
-      className="absolute top-0 right-0 h-full"
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      style={{
-        aspectRatio: "0.64",
-        overflow: "visible",
-        filter: `brightness(${0.25 + 0.75 * brightness})`,
-      }}
+    <div
+className="absolute right-0 landscape:-right-[20vw] bottom-0 pointer-events-none w-full landscape:w-[82vw] landscape:bottom-auto landscape:top-[calc(35.8vh-0vw)]"      style={{ isolation: "isolate" }}
     >
-      <defs>
-        <linearGradient id="wingTop" x1="0" y1="0" x2="1" y2="0.4">
-          <stop offset="0" stopColor="#f2eef6" />
-          <stop offset="1" stopColor="#b9b6cc" />
-        </linearGradient>
-        <linearGradient id="wingTip" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#3b4f9a" />
-          <stop offset="1" stopColor="#6b7bb8" />
-        </linearGradient>
-      </defs>
-      {/* Main wing surface */}
-      <path
-        d="M 46 38 L 52 46 L 64 52 L 88 58 L 112 62 L 112 78 L 96 76 L 74 73 L 74 70 L 88 68 L 66 60 L 54 55 L 47 47 Z"
-        fill="url(#wingTop)"
+      <img
+        src={wingUrl}
+        alt=""
+        draggable={false}
+        className="block w-full h-auto select-none"
+        style={{ filter: `brightness(${brightness})` }}
       />
-      {/* Winglet */}
-      <path d="M 41 29 L 47 31 L 52 44 L 49 48 L 45 44 Z" fill="url(#wingTip)" />
-      {/* Flap line */}
-      <path d="M 74 70 L 96 73" stroke="#8d8aa3" strokeWidth="0.4" fill="none" />
-    </svg>
+      {/* Warm light on the wing, masked to the wing's own shape */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: rgb(tint, Math.min(1, palette.glow * 0.9)),
+          mixBlendMode: "soft-light",
+          WebkitMaskImage: `url(${wingUrl})`,
+          maskImage: `url(${wingUrl})`,
+          WebkitMaskSize: "100% 100%",
+          maskSize: "100% 100%",
+        }}
+      />
+    </div>
   );
 }
